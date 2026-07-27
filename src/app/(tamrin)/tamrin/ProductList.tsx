@@ -9,7 +9,7 @@ type data={
 export default function ProductList({allData}:{allData:data}) {
 
 
-console.log("data == ", allData)
+// console.log("data == ", allData)
 
 //  allData.title
   return (
