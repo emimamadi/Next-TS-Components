@@ -1,34 +1,17 @@
-import React from "react";
-import Calculator from "./Calculator";
-
-import {ProductGrid} from "./ProductGrid";
-
+import { Suspense } from "react";
+import { ProductGrid } from "./ProductGrid";
 import PostList from "./PostList";
 
-// async function getData() {
-//   const res = await fetch("https://dummyjson.com/products");
-
-//   const result = await res.json();
-
-//   return result;
-// }
-
 export default function Page() {
-//   const Result = getData();
-
-//   console.log(Result);
-
-
-
-
   return (
-    <div>
-      {/* <Calculator/> */}
+    <div className="space-y-8 p-6">
+      <Suspense fallback={<div className="rounded-xl bg-sky-100 p-4 text-sky-700">Loading products...</div>}>
+        <ProductGrid />
+      </Suspense>
 
-      {/* <ProductList Result={Result} /> */}
-
-      <ProductGrid/>
-      <PostList/>
+      <Suspense fallback={<div className="rounded-xl bg-slate-100 p-4 text-slate-700">Loading posts...</div>}>
+        <PostList />
+      </Suspense>
     </div>
   );
 }
