@@ -8,14 +8,15 @@ export default async function PostList() {
   const posts: Post[] = await response.json();
 
   return (
-    <ul>
-      {posts.map((post) => (
-        <li key={post.id}>{post.title}</li>
-      ))}
-    </ul>
+    <div className="my-20">
+      <ul className="flex flex-col gap-2">
+        {posts.map((post) => (
+          <li key={post.id}>{post.title}</li>
+        ))}
+      </ul>
+    </div>
   );
 }
-
 
 // app/products/page.jsx
 
@@ -32,17 +33,12 @@ export default async function PostList() {
 //   return <ProductGrid products={products} />;
 // }
 
-
-
-
-
-
 // export default function ProductList({Result}:{Result:Promise<{ id: string; title: string }[]>}) {
 
 //     console.log("Product list ==",Result, )
 //   return (
 //     <>
-    
+
 //     <div>ProductList</div>
 //     <div className=""></div>
 //     </>

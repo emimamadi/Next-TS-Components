@@ -4,7 +4,7 @@ import PostList from "./PostList";
 
 export default function Page() {
   return (
-    <div className="space-y-8 p-6">
+    <div className="my-20 p-6">
       <Suspense fallback={<div className="rounded-xl bg-sky-100 p-4 text-sky-700">Loading products...</div>}>
         <ProductGrid />
       </Suspense>
