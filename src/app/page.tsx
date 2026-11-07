@@ -1,65 +1,81 @@
-import Image from "next/image";
+import Link from "next/link";
 
-export default function Home() {
+import { getSession } from "@/lib/auth";
+
+export default async function Home() {
+  const user = await getSession();
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="min-h-screen bg-slate-100 px-6 py-16 text-slate-900">
+      <div className="mx-auto max-w-5xl rounded-3xl bg-white p-8 shadow-xl">
+        <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p className="text-sm font-medium uppercase tracking-[0.25em] text-indigo-600">
+              Auth demo
+            </p>
+            <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">
+              Secure access with roles
+            </h1>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            {user ? (
+              <>
+                <Link
+                  className="rounded-xl bg-indigo-600 px-4 py-2.5 font-medium text-white transition hover:bg-indigo-500"
+                  href="/dashboard"
+                >
+                  Dashboard
+                </Link>
+                {user.role === "admin" ? (
+                  <Link
+                    className="rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-2.5 font-medium text-indigo-700 transition hover:bg-indigo-100"
+                    href="/admin"
+                  >
+                    Admin panel
+                  </Link>
+                ) : null}
+              </>
+            ) : (
+              <Link
+                className="rounded-xl bg-indigo-600 px-4 py-2.5 font-medium text-white transition hover:bg-indigo-500"
+                href="/login"
+              >
+                Sign in
+              </Link>
+            )}
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <div className="mt-10 grid gap-6 md:grid-cols-3">
+          <div className="rounded-2xl bg-slate-50 p-5">
+            <p className="text-sm uppercase tracking-[0.2em] text-slate-600">Status</p>
+            <p className="mt-3 text-2xl font-semibold">{user ? "Logged in" : "Guest"}</p>
+            <p className="mt-2 text-slate-600">
+              {user ? `Signed in as ${user.name}` : "Create a session to unlock protected pages."}
+            </p>
+          </div>
+
+          <div className="rounded-2xl bg-emerald-50 p-5">
+            <p className="text-sm uppercase tracking-[0.2em] text-emerald-700">User access</p>
+            <p className="mt-3 text-2xl font-semibold">Standard</p>
+            <p className="mt-2 text-slate-600">Users can access the dashboard and personal content.</p>
+          </div>
+
+          <div className="rounded-2xl bg-rose-50 p-5">
+            <p className="text-sm uppercase tracking-[0.2em] text-rose-700">Admin access</p>
+            <p className="mt-3 text-2xl font-semibold">Restricted</p>
+            <p className="mt-2 text-slate-600">Only admin-role sessions can reach the admin area.</p>
+          </div>
         </div>
-      </main>
-    </div>
+
+        <div className="mt-10 rounded-2xl border border-slate-200 bg-slate-50 p-6">
+          <h2 className="text-xl font-semibold">Demo credentials</h2>
+          <ul className="mt-4 space-y-2 text-slate-600">
+            <li>Admin: admin@demo.com / admin123</li>
+            <li>User: user@demo.com / user123</li>
+          </ul>
+        </div>
+      </div>
+    </main>
   );
 }
