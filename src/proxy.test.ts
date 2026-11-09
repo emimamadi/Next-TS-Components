@@ -1,14 +1,14 @@
 /** @jest-environment node */
 
 import * as auth from "@/lib/auth";
-import { middleware } from "@/middleware";
+import { proxy } from "@/proxy";
 import type { NextRequest } from "next/server";
 
 jest.mock("@/lib/auth", () => ({
   parseSessionCookie: jest.fn(),
 }));
 
-describe("middleware", () => {
+describe("proxy", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -20,9 +20,9 @@ describe("middleware", () => {
       nextUrl: { pathname: "/dashboard" },
       cookies: { get: jest.fn(() => undefined) },
       url: "http://localhost/dashboard",
-    } as NextRequest;
+    } as unknown as NextRequest;
 
-    const response = await middleware(request);
+    const response = await proxy(request);
 
     expect(response.status).toBe(307);
     expect(decodeURIComponent(response.headers.get("location") ?? "")).toContain("/login?redirect=/dashboard");
@@ -40,9 +40,9 @@ describe("middleware", () => {
       nextUrl: { pathname: "/admin" },
       cookies: { get: jest.fn(() => ({ value: "cookie-value" })) },
       url: "http://localhost/admin",
-    } as NextRequest;
+    } as unknown as NextRequest;
 
-    const response = await middleware(request);
+    const response = await proxy(request);
 
     expect(response.status).toBe(307);
     expect(response.headers.get("location")).toContain("/unauthorized");
@@ -60,9 +60,9 @@ describe("middleware", () => {
       nextUrl: { pathname: "/admin" },
       cookies: { get: jest.fn(() => ({ value: "cookie-value" })) },
       url: "http://localhost/admin",
-    } as NextRequest;
+    } as unknown as NextRequest;
 
-    const response = await middleware(request);
+    const response = await proxy(request);
 
     expect(response.status).toBe(200);
   });

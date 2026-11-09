@@ -4,7 +4,7 @@ import { SESSION_COOKIE_NAME, parseSessionCookie } from "@/lib/auth";
 
 const publicRoutes = ["/", "/login"];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (pathname.startsWith("/_next") || pathname.startsWith("/api") || pathname.includes(".")) {
