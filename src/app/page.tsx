@@ -18,6 +18,18 @@ export default async function Home() {
             </h1>
           </div>
           <div className="flex flex-wrap gap-3">
+            <Link
+              className="rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-2.5 font-medium text-indigo-700 transition hover:bg-indigo-100"
+              href="/blog"
+            >
+              Blog
+            </Link>
+            <Link
+              className="rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-2.5 font-medium text-indigo-700 transition hover:bg-indigo-100"
+              href="/products"
+            >
+              Products
+            </Link>
             {user ? (
               <>
                 <Link
