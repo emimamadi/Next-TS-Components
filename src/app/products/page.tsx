@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { updateCartItems, useCartItems } from "@/lib/cart";
 
 type Product = {
   id: number;
@@ -38,6 +39,7 @@ export default function ProductsPage() {
   const [maxPrice, setMaxPrice] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>("featured");
   const [limit, setLimit] = useState(8);
+  const cartItems = useCartItems();
 
   const filteredProducts = useMemo(() => {
     const priceLimit = maxPrice === "" ? Number.POSITIVE_INFINITY : Number(maxPrice);
@@ -63,6 +65,21 @@ export default function ProductsPage() {
   }, [category, maxPrice, sortBy]);
 
   const visibleProducts = filteredProducts.slice(0, limit);
+  const itemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+
+  const addToCart = (product: Product) => {
+    updateCartItems((currentItems) => {
+      const existingItem = currentItems.find((item) => item.id === product.id);
+
+      if (existingItem) {
+        return currentItems.map((item) =>
+          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item,
+        );
+      }
+
+      return [...currentItems, { ...product, quantity: 1 }];
+    });
+  };
 
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-8 text-slate-900 sm:px-6 sm:py-12">
@@ -77,12 +94,23 @@ export default function ProductsPage() {
               Thoughtful picks for your home, work, and everywhere in between.
             </p>
           </div>
-          <Link
-            href="/"
-            className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 font-medium text-slate-700 shadow-sm transition hover:bg-slate-100"
-          >
-            Back home
-          </Link>
+          <div className="flex flex-wrap items-center gap-3">
+            <Link
+              href="/products/cart"
+              className="inline-flex items-center gap-2 rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-2.5 font-medium text-indigo-700 shadow-sm transition hover:bg-indigo-100"
+            >
+              Cart
+              <span className="rounded-full bg-indigo-600 px-2 py-0.5 text-xs font-semibold text-white">
+                {itemCount}
+              </span>
+            </Link>
+            <Link
+              href="/"
+              className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 font-medium text-slate-700 shadow-sm transition hover:bg-slate-100"
+            >
+              Back home
+            </Link>
+          </div>
         </header>
 
         <section
@@ -149,6 +177,11 @@ export default function ProductsPage() {
           <p aria-live="polite" className="text-sm text-slate-600">
             Showing {visibleProducts.length} of {filteredProducts.length} products
           </p>
+          {itemCount > 0 ? (
+            <Link href="/products/checkout" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+              Proceed to checkout
+            </Link>
+          ) : null}
         </div>
 
         {visibleProducts.length > 0 ? (
@@ -160,7 +193,7 @@ export default function ProductsPage() {
               >
                 <div
                   aria-hidden="true"
-                  className={`flex h-44 items-center justify-center bg-gradient-to-br ${product.color}`}
+                  className={`flex h-44 items-center justify-center bg-linear-to-br ${product.color}`}
                 >
                   <span className="text-7xl drop-shadow-sm">{product.icon}</span>
                 </div>
@@ -174,6 +207,13 @@ export default function ProductsPage() {
                   <h2 className="mt-2 text-lg font-semibold">{product.name}</h2>
                   <p className="mt-2 min-h-12 text-sm leading-6 text-slate-600">{product.description}</p>
                   <p className="mt-4 text-xl font-bold">${product.price.toFixed(2)}</p>
+                  <button
+                    type="button"
+                    onClick={() => addToCart(product)}
+                    className="mt-4 w-full rounded-xl bg-indigo-600 px-4 py-2.5 font-medium text-white transition hover:bg-indigo-500"
+                  >
+                    Add to cart
+                  </button>
                 </div>
               </article>
             ))}

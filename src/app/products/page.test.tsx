@@ -1,8 +1,13 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
+import { beforeEach } from "@jest/globals";
 
 import ProductsPage from "@/app/products/page";
 
 describe("Products page", () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
   it("filters by category and maximum price, then sorts the matching products", () => {
     render(<ProductsPage />);
 
@@ -32,5 +37,14 @@ describe("Products page", () => {
 
     expect(screen.getByText("Showing 4 of 12 products")).toBeInTheDocument();
     expect(screen.getByRole("region", { name: "Products" }).querySelectorAll("article")).toHaveLength(4);
+  });
+
+  it("adds a product to the cart and updates the cart count", () => {
+    render(<ProductsPage />);
+
+    fireEvent.click(screen.getAllByRole("button", { name: "Add to cart" })[0]);
+
+    expect(screen.getByRole("link", { name: /cart\s*1/i })).toBeInTheDocument();
+    expect(JSON.parse(localStorage.getItem("the-everyday-edit-cart") ?? "[]")).toHaveLength(1);
   });
 });

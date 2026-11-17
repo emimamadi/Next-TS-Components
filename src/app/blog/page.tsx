@@ -55,7 +55,7 @@ export default function BlogPage() {
           </div>
         </header>
 
-        <section className="mb-8 overflow-hidden rounded-3xl bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-500 p-8 text-white shadow-lg">
+        <section className="mb-8 overflow-hidden rounded-3xl bg-linear-to-r from-indigo-600 via-violet-600 to-sky-500 p-8 text-white shadow-lg">
           <div className="max-w-2xl">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-indigo-100">
               Featured story
