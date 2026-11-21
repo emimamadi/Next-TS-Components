@@ -70,9 +70,9 @@ describe("loginAction", () => {
     const formData = new FormData();
     formData.set("email", "admin@demo.com");
     formData.set("password", "admin123");
-    formData.set("redirect", "/admin?tab=users");
+    formData.set("redirect", "/dashboard");
 
-    await expect(loginAction(undefined, formData)).rejects.toThrow("REDIRECT:/admin?tab=users");
+    await expect(loginAction(undefined, formData)).rejects.toThrow("REDIRECT:/dashboard");
 
     expect(cookieStore.set).toHaveBeenCalledWith(
       "session",
@@ -83,7 +83,7 @@ describe("loginAction", () => {
         path: "/",
       }),
     );
-    expect(redirect).toHaveBeenCalledWith("/admin?tab=users");
+    expect(redirect).toHaveBeenCalledWith("/dashboard");
   });
 
   it.each(["https://example.com", "//example.com/path", "/\\\\example.com"])(

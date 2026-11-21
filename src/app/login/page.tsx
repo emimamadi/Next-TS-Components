@@ -1,11 +1,15 @@
 import { LoginForm } from "@/components/login-form";
 
-export default function LoginPage({
+export default async function LoginPage({
   searchParams,
 }: {
-  searchParams?: { redirect?: string };
+  searchParams: Promise<{ redirect?: string }>;
 }) {
-  const redirectTo = typeof searchParams?.redirect === "string" ? searchParams.redirect : "/dashboard";
+  const resolvedSearchParams = await searchParams;
+  const redirectTo =
+    typeof resolvedSearchParams.redirect === "string"
+      ? resolvedSearchParams.redirect
+      : "/dashboard";
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-slate-100 px-4 py-12">

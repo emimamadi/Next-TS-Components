@@ -27,5 +27,6 @@ describe("Dashboard page", () => {
     expect(screen.getByText("Welcome, Admin User")).toBeInTheDocument();
     expect(screen.getByText("Role: admin")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Log out" })).toBeInTheDocument();
+    expect(screen.getByText("Admin privileges are active")).toBeInTheDocument();
   });
 });

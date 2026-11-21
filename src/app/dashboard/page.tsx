@@ -53,15 +53,17 @@ export default async function DashboardPage() {
           >
             Home
           </Link>
-          {user?.role === "admin" ? (
-            <Link
-              className="rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-2.5 font-medium text-indigo-700 transition hover:bg-indigo-100"
-              href="/admin"
-            >
-              Admin panel
-            </Link>
-          ) : null}
         </div>
+
+        {user.role === "admin" ? (
+          <div className="mt-6 rounded-2xl border border-rose-200 bg-rose-50 p-5">
+            <p className="text-sm uppercase tracking-[0.2em] text-rose-700">Administration</p>
+            <p className="mt-2 font-semibold text-rose-900">Admin privileges are active</p>
+            <p className="mt-1 text-sm text-slate-600">
+              This account can manage the protected application features.
+            </p>
+          </div>
+        ) : null}
       </div>
     </main>
   );

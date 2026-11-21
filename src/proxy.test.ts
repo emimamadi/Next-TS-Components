@@ -28,42 +28,4 @@ describe("proxy", () => {
     expect(decodeURIComponent(response.headers.get("location") ?? "")).toContain("/login?redirect=/dashboard");
   });
 
-  it("blocks non-admin users from admin routes", async () => {
-    (auth.parseSessionCookie as jest.Mock).mockResolvedValue({
-      id: "user-normal",
-      name: "Regular User",
-      email: "user@demo.com",
-      role: "user",
-    });
-
-    const request = {
-      nextUrl: { pathname: "/admin" },
-      cookies: { get: jest.fn(() => ({ value: "cookie-value" })) },
-      url: "http://localhost/admin",
-    } as unknown as NextRequest;
-
-    const response = await proxy(request);
-
-    expect(response.status).toBe(307);
-    expect(response.headers.get("location")).toContain("/unauthorized");
-  });
-
-  it("allows admin users to access admin routes", async () => {
-    (auth.parseSessionCookie as jest.Mock).mockResolvedValue({
-      id: "user-admin",
-      name: "Admin User",
-      email: "admin@demo.com",
-      role: "admin",
-    });
-
-    const request = {
-      nextUrl: { pathname: "/admin" },
-      cookies: { get: jest.fn(() => ({ value: "cookie-value" })) },
-      url: "http://localhost/admin",
-    } as unknown as NextRequest;
-
-    const response = await proxy(request);
-
-    expect(response.status).toBe(200);
-  });
 });

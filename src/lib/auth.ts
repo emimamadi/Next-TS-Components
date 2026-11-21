@@ -127,6 +127,10 @@ export async function parseSessionCookie(value: string | undefined): Promise<Aut
       return null;
     }
 
+    if (parsed.role !== "admin" && parsed.role !== "user") {
+      return null;
+    }
+
     return {
       id: parsed.id,
       name: parsed.name,

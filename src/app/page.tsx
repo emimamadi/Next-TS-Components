@@ -38,14 +38,6 @@ export default async function Home() {
                 >
                   Dashboard
                 </Link>
-                {user.role === "admin" ? (
-                  <Link
-                    className="rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-2.5 font-medium text-indigo-700 transition hover:bg-indigo-100"
-                    href="/admin"
-                  >
-                    Admin panel
-                  </Link>
-                ) : null}
               </>
             ) : (
               <Link

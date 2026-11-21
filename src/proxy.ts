@@ -16,9 +16,8 @@ export async function proxy(request: NextRequest) {
   }
 
   const isProtectedRoute = pathname === "/dashboard" || pathname.startsWith("/dashboard/");
-  const isAdminRoute = pathname === "/admin" || pathname.startsWith("/admin/");
 
-  if (!isProtectedRoute && !isAdminRoute) {
+  if (!isProtectedRoute) {
     return NextResponse.next();
   }
 
@@ -31,13 +30,9 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  if (isAdminRoute && session.role !== "admin") {
-    return NextResponse.redirect(new URL("/unauthorized", request.url));
-  }
-
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/admin/:path*", "/dashboard", "/admin"],
+  matcher: ["/dashboard/:path*", "/dashboard"],
 };
